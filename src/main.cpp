@@ -8,6 +8,8 @@ int main(void)
   InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT,
 			 "raylib_example");
 
+  Texture2D dvd = LoadTexture("../textures/DVD_logo.png");
+
   Camera2D camera = {0};
   camera.target = (Vector2){10.0f, 20.0f};
   camera.offset = (Vector2){SCREEN_WIDTH/2.0f, SCREEN_HEIGHT/2.0f};
@@ -20,9 +22,9 @@ int main(void)
 	if (IsKeyDown(KEY_RIGHT)) camera.target.x += 2;
 	else if (IsKeyDown(KEY_LEFT)) camera.target.x -= 2;
 	BeginDrawing();
-	    ClearBackground(BLACK);
+	    ClearBackground(RAYWHITE);
 	    BeginMode2D(camera);
-		DrawRectangle(0, 0, 100, 100, RED);
+		DrawTextureEx(dvd, (Vector2){0}, 0.0f, 0.25f, WHITE);
 	    EndMode2D();
 	EndDrawing();
   }
