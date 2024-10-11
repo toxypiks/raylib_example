@@ -24,8 +24,11 @@ int main(void)
   };
 
   while (!WindowShouldClose()) {
-	if (dvd_position.y + dvd.height * DVD_SCALING > SCREEN_HEIGHT) {
+	if (dvd_position.y + dvd.height * DVD_SCALING > SCREEN_HEIGHT || dvd_position.y < 0) {
 	  dvd_velocity.y = -dvd_velocity.y;
+	}
+	if (dvd_position.x + dvd.width * DVD_SCALING > SCREEN_WIDTH || dvd_position.x < 0) {
+	  dvd_velocity.x = -dvd_velocity.x;
 	}
 
 	dvd_position = Vector2Add(dvd_position, dvd_velocity);
