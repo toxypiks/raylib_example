@@ -16,11 +16,6 @@ int main(void)
 
   Texture2D dvd = LoadTexture("../textures/DVD_logo.png");
 
-  Camera2D camera = {0};
-  camera.target = (Vector2){10.0f, 20.0f};
-  camera.offset = (Vector2){SCREEN_WIDTH/2.0f, SCREEN_HEIGHT/2.0f};
-  camera.zoom = 1.0f;
-
   SetTargetFPS(SCREEN_FPS);
 
   Vector2 dvd_position = {0};
@@ -29,13 +24,15 @@ int main(void)
   };
 
   while (!WindowShouldClose()) {
+	if (dvd_position.y + dvd.height * DVD_SCALING > SCREEN_HEIGHT) {
+	  dvd_velocity.y = -dvd_velocity.y;
+	}
+
 	dvd_position = Vector2Add(dvd_position, dvd_velocity);
 
 	BeginDrawing();
 	    ClearBackground(RAYWHITE);
-	    BeginMode2D(camera);
 		DrawTextureEx(dvd, dvd_position, 0.0f, DVD_SCALING, WHITE);
-	    EndMode2D();
 	EndDrawing();
   }
 
