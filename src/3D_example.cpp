@@ -17,6 +17,8 @@ int main(void)
   camera.fovy = 45.0f;
   camera.projection = CAMERA_PERSPECTIVE;
 
+  int cameraMode = CAMERA_FIRST_PERSON;
+
   Model model = LoadModel("../models/guy.iqm");
   Texture2D texture = LoadTexture("../textures/guytex.png");
   SetMaterialTexture(&model.materials[0], MATERIAL_MAP_DIFFUSE, texture);
@@ -28,7 +30,30 @@ int main(void)
 
   while (!WindowShouldClose())
   {
-	UpdateCamera(&camera, CAMERA_FIRST_PERSON);
+	if (IsKeyPressed(KEY_ONE))
+        {
+            cameraMode = CAMERA_FREE;
+            camera.up = (Vector3){ 0.0f, 1.0f, 0.0f }; // Reset roll
+        }
+
+	if (IsKeyPressed(KEY_TWO))
+        {
+            cameraMode = CAMERA_FIRST_PERSON;
+            camera.up = (Vector3){ 0.0f, 1.0f, 0.0f }; // Reset roll
+        }
+
+	if (IsKeyPressed(KEY_THREE))
+        {
+            cameraMode = CAMERA_THIRD_PERSON;
+            camera.up = (Vector3){ 0.0f, 1.0f, 0.0f }; // Reset roll
+        }
+
+	if (IsKeyPressed(KEY_FOUR))
+        {
+            cameraMode = CAMERA_ORBITAL;
+            camera.up = (Vector3){ 0.0f, 1.0f, 0.0f }; // Reset roll
+        }
+	UpdateCamera(&camera, cameraMode);
 
 	BeginDrawing();
 	{
