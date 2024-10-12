@@ -1,6 +1,7 @@
 #include <raylib.h>
 #include <raymath.h>
 
+#include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
 
@@ -13,6 +14,7 @@
 #define PROJ_HEIGHT 100
 #define PROJ_LEN 100
 #define PROJ_COLOR BLACK
+#define PROJ_VEL 100.0
 
 typedef struct {
   bool alive;
@@ -54,9 +56,14 @@ void spawn_proj(Vector3 pos, Vector3 dir)
   }
 }
 
+Vector3 camera_direction(Camera *camera)
+{
+  return Vector3Normalize(Vector3Subtract(camera->target, camera->position)); //What does that do exactly?
+}
+
 int main(void)
 {
-  InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "raylib_3D_example");
+  InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "3D_projectiles_example");
 
   Camera camera = {0};
   camera.position = (Vector3){10.0f, 10.0f, 10.0f};
@@ -78,30 +85,11 @@ int main(void)
 
   while (!WindowShouldClose())
   {
-	if (IsKeyPressed(KEY_ONE))
-        {
-            cameraMode = CAMERA_FREE;
-            camera.up = (Vector3){ 0.0f, 1.0f, 0.0f }; // Reset roll
-        }
-
-	if (IsKeyPressed(KEY_TWO))
-        {
-            cameraMode = CAMERA_FIRST_PERSON;
-            camera.up = (Vector3){ 0.0f, 1.0f, 0.0f }; // Reset roll
-        }
-
-	if (IsKeyPressed(KEY_THREE))
-        {
-            cameraMode = CAMERA_THIRD_PERSON;
-            camera.up = (Vector3){ 0.0f, 1.0f, 0.0f }; // Reset roll
-        }
-
-	if (IsKeyPressed(KEY_FOUR))
-        {
-            cameraMode = CAMERA_ORBITAL;
-            camera.up = (Vector3){ 0.0f, 1.0f, 0.0f }; // Reset roll
-        }
-
+	if (IsMouseButtonDown(MOUSE_LEFT_BUTTON)) {
+	  spawn_proj(camera.position,
+				 Vector3Scale(camera_direction(&camera), PROJ_VEL));
+	}
+	update_projs();
 	UpdateCamera(&camera, cameraMode);
 
 	BeginDrawing();
@@ -109,9 +97,7 @@ int main(void)
 	  ClearBackground(RAYWHITE);
 	  BeginMode3D(camera);
 	  {
-		for (size_t i = 0; i < projs_size; i++) {
-		  draw_projs();
-		}
+		draw_projs();
 		DrawModelEx(model, position, (Vector3){ 1.0f, 0.0f, 0.0f }, -90.0f, (Vector3){ 1.0f, 1.0f, 1.0f }, WHITE);
 		DrawGrid(10, 1.0f);
 	  }
