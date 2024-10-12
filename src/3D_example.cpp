@@ -8,14 +8,36 @@
 
 int main(void)
 {
-  InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "raylib_3d_example");
+  InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "raylib_3D_example");
 
+  Camera camera = {0};
+  camera.position = (Vector3){10.0f, 10.0f, 10.0f};
+  camera.target = (Vector3){0.0f, 0.0f, 0.0f};
+  camera.up = (Vector3){0.0f, 1.0f, 0.0f};
+  camera.fovy = 45.0f;
+  camera.projection = CAMERA_PERSPECTIVE;
+
+  Model model = LoadModel("../models/guy.iqm");
+  Texture2D texture = LoadTexture("../textures/guytex.png");
+  SetMaterialTexture(&model.materials[0], MATERIAL_MAP_DIFFUSE, texture);
+
+  Vector3 position = {0};
+
+  DisableCursor();
   SetTargetFPS(SCREEN_FPS);
 
-  while (!WindowShouldClose()) {
+  while (!WindowShouldClose())
+  {
+	UpdateCamera(&camera, CAMERA_FIRST_PERSON);
+
 	BeginDrawing();
 	{
 	  ClearBackground(RAYWHITE);
+	  BeginMode3D(camera);
+	  {
+		DrawModelEx(model, position, (Vector3){ 1.0f, 0.0f, 0.0f }, -90.0f, (Vector3){ 1.0f, 1.0f, 1.0f }, WHITE);
+	  }
+	  EndMode3D();
 	}
 	EndDrawing();
   }
