@@ -53,6 +53,7 @@ int main(void)
             cameraMode = CAMERA_ORBITAL;
             camera.up = (Vector3){ 0.0f, 1.0f, 0.0f }; // Reset roll
         }
+
 	UpdateCamera(&camera, cameraMode);
 
 	BeginDrawing();
@@ -61,6 +62,7 @@ int main(void)
 	  BeginMode3D(camera);
 	  {
 		DrawModelEx(model, position, (Vector3){ 1.0f, 0.0f, 0.0f }, -90.0f, (Vector3){ 1.0f, 1.0f, 1.0f }, WHITE);
+		DrawGrid(10, 1.0f);
 	  }
 	  EndMode3D();
 	}
