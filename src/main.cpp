@@ -15,6 +15,34 @@ int main(void)
 			 "raylib_example");
 
   Texture2D dvd = LoadTexture("../textures/DVD_logo.png");
+  Shader shader = LoadShader(0, TextFormat("../shades/wave.fs", 330));
+
+  int secondsLoc = GetShaderLocation(shader, "seconds");
+  int freqXLoc = GetShaderLocation(shader, "freqX");
+  int freqYLoc = GetShaderLocation(shader, "freqY");
+  int ampXLoc = GetShaderLocation(shader, "ampX");
+  int ampYLoc = GetShaderLocation(shader, "ampY");
+  int speedXLoc = GetShaderLocation(shader, "speedX");
+  int speedYLoc = GetShaderLocation(shader, "speedY");
+
+  // Shader uniform values that can be updated at any time
+  float freqX = 25.0f;
+  float freqY = 25.0f;
+  float ampX = 5.0f;
+  float ampY = 5.0f;
+  float speedX = 8.0f;
+  float speedY = 8.0f;
+
+  float screenSize[2] = { (float)GetScreenWidth(), (float)GetScreenHeight() };
+  SetShaderValue(shader, GetShaderLocation(shader, "size"), &screenSize, SHADER_UNIFORM_VEC2);
+  SetShaderValue(shader, freqXLoc, &freqX, SHADER_UNIFORM_FLOAT);
+  SetShaderValue(shader, freqYLoc, &freqY, SHADER_UNIFORM_FLOAT);
+  SetShaderValue(shader, ampXLoc, &ampX, SHADER_UNIFORM_FLOAT);
+  SetShaderValue(shader, ampYLoc, &ampY, SHADER_UNIFORM_FLOAT);
+  SetShaderValue(shader, speedXLoc, &speedX, SHADER_UNIFORM_FLOAT);
+  SetShaderValue(shader, speedYLoc, &speedY, SHADER_UNIFORM_FLOAT);
+
+  float seconds = 0.0f;
 
   SetTargetFPS(SCREEN_FPS);
 
@@ -24,6 +52,12 @@ int main(void)
   };
 
   while (!WindowShouldClose()) {
+
+	seconds += GetFrameTime();
+
+	SetShaderValue(shader, secondsLoc, &seconds, SHADER_UNIFORM_FLOAT);
+
+
 	if (dvd_position.y + dvd.height * DVD_SCALING > SCREEN_HEIGHT || dvd_position.y < 0) {
 	  dvd_velocity.y = -dvd_velocity.y;
 	}
@@ -35,7 +69,9 @@ int main(void)
 
 	BeginDrawing();
 	    ClearBackground(RAYWHITE);
+		BeginShaderMode(shader);
 		DrawTextureEx(dvd, dvd_position, 0.0f, DVD_SCALING, WHITE);
+		EndShaderMode();
 	EndDrawing();
   }
 
