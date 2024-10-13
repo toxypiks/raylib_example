@@ -10,14 +10,17 @@
 #define SCREEN_FPS 60
 
 #define PROJS_CAP 1000
-#define PROJ_WIDTH 1
-#define PROJ_HEIGHT 1
-#define PROJ_LEN 1
-#define PROJ_COLOR BLACK
-#define PROJ_VEL 1000.0
-#define PROJ_LIFETIME 5.0
+#define PROJ_WIDTH 1.0f
+#define PROJ_HEIGHT 1.0f
+#define PROJ_LEN 1.0f
+#define PROJ_COLOR WHITE
+#define PROJ_VEL 1000.0f
+#define PROJ_LIFETIME 5.0f
 
-#define GUN_LEN 0.001
+#define BACKGROUND_COLOR BLACK
+
+#define PLAYER_GUN_LEN 0.0f
+#define PLAYER_HEIGHT 1.0f
 
 typedef float Seconds;
 
@@ -72,12 +75,17 @@ Vector3 camera_direction(Camera *camera)
   return Vector3Normalize(Vector3Subtract(camera->target, camera->position)); //What does that do exactly?
 }
 
+#define V3_Fmt "{%f, %f, %f}"
+#define V3_Arg(v3) v3.x, v3.y, v3.z
+
+char hud_buffer[1024];
+
 int main(void)
 {
   InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "3D_projectiles_example");
 
   Camera camera = {0};
-  camera.position = (Vector3){10.0f, 10.0f, 10.0f};
+  camera.position = (Vector3){1.0f, PLAYER_HEIGHT, 1.0f};
   camera.target = (Vector3){0.0f, 0.0f, 0.0f};
   camera.up = (Vector3){0.0f, 1.0f, 0.0f};
   camera.fovy = 45.0f;
@@ -89,7 +97,7 @@ int main(void)
   Texture2D texture = LoadTexture("../textures/guytex.png");
   SetMaterialTexture(&model.materials[0], MATERIAL_MAP_DIFFUSE, texture);
 
-  Vector3 position = {0};
+  Vector3 position = (Vector3){0.0f, 0.0f, 0.0f};
 
   DisableCursor();
   SetTargetFPS(SCREEN_FPS);
@@ -98,7 +106,7 @@ int main(void)
   {
 	if (IsMouseButtonDown(MOUSE_LEFT_BUTTON)) {
 	  Vector3 dir = camera_direction(&camera);
-	  spawn_proj(Vector3Add(camera.position, Vector3Scale(dir, GUN_LEN)),
+	  spawn_proj(Vector3Add(camera.position, Vector3Scale(dir, PLAYER_GUN_LEN)),
 				 Vector3Scale(dir, PROJ_VEL));
 	}
 	update_projs();
@@ -106,7 +114,7 @@ int main(void)
 
 	BeginDrawing();
 	{
-	  ClearBackground(RAYWHITE);
+	  ClearBackground(BACKGROUND_COLOR);
 	  BeginMode3D(camera);
 	  {
 		DrawModelEx(model, position, (Vector3){ 1.0f, 0.0f, 0.0f }, -90.0f, (Vector3){ 1.0f, 1.0f, 1.0f }, WHITE);
@@ -114,6 +122,9 @@ int main(void)
 		DrawGrid(10, 1.0f);
 	  }
 	  EndMode3D();
+	  snprintf(hud_buffer, sizeof(hud_buffer),
+			   "Target: " V3_Fmt, V3_Arg(camera.target));
+		DrawText(hud_buffer, 10, 10, 20, MAROON);
 	}
 	EndDrawing();
   }
