@@ -10,11 +10,13 @@
 #define SCREEN_FPS 60
 
 #define PROJS_CAP 69
-#define PROJ_WIDTH 100
-#define PROJ_HEIGHT 100
-#define PROJ_LEN 100
+#define PROJ_WIDTH 10
+#define PROJ_HEIGHT 10
+#define PROJ_LEN 10
 #define PROJ_COLOR BLACK
-#define PROJ_VEL 100.0
+#define PROJ_VEL 1000.0
+
+#define GUN_LEN 50.0
 
 typedef struct {
   bool alive;
@@ -29,7 +31,11 @@ void draw_projs(void)
 {
   for (size_t i = 0; i < PROJS_CAP; i++) {
 	if (projs[i].alive) {
-	  DrawCube(projs[i].pos, PROJ_WIDTH, PROJ_HEIGHT, PROJ_LEN, PROJ_COLOR);
+	  DrawCube(projs[i].pos,
+			   PROJ_WIDTH,
+			   PROJ_HEIGHT,
+			   PROJ_LEN,
+			   PROJ_COLOR);
 	}
   }
 }
@@ -86,8 +92,9 @@ int main(void)
   while (!WindowShouldClose())
   {
 	if (IsMouseButtonDown(MOUSE_LEFT_BUTTON)) {
-	  spawn_proj(camera.position,
-				 Vector3Scale(camera_direction(&camera), PROJ_VEL));
+	  Vector3 dir = camera_direction(&camera);
+	  spawn_proj(Vector3Add(camera.position, Vector3Scale(dir, GUN_LEN)),
+				 Vector3Scale(dir, PROJ_VEL));
 	}
 	update_projs();
 	UpdateCamera(&camera, cameraMode);
