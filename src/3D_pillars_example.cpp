@@ -71,19 +71,52 @@ void spawn_proj(Vector3 pos, Vector3 dir)
 }
 
 typedef struct {
-  Vector3 position;
-  float heigth;
+  Vector2 position;
+  float height;
+  Color color;
 } Pillar;
 
-#define PILLARS_CAP 1
+#define PILLARS_GRID_WIDTH 3
+#define PILLARS_GRID_HEIGHT 23
+#define PILLARS_GRID_SPACING_X 2.0f
+#define PILLARS_GRID_SPACING_Y 2.0f
+#define PILLARS_CAP (PILLARS_GRID_WIDTH * PILLARS_GRID_HEIGHT)
 #define PILLAR_COLOR LIME
+#define PILLAR_SIZE_X 1.0f
+#define PILLAR_SIZE_Z 1.0f
 
 Pillar pillars[PILLARS_CAP] = {0};
 
 void draw_pillars(void)
 {
   for(size_t i = 0; i < PILLARS_CAP; ++i) {
-	DrawCubeV(pillars[i].position, (Vector3) {1.0f, 2.0f, 1.0f}, PILLAR_COLOR);
+	DrawCubeV(
+	  (Vector3) {
+		pillars[i].position.x,
+		pillars[i].height / 2.0,
+		pillars[i].position.y
+	  },
+	  (Vector3) {
+		PILLAR_SIZE_X,
+		pillars[i].height,
+		PILLAR_SIZE_Z
+	  },
+	  pillars[i].color);
+  }
+}
+
+void init_pillars(void)
+{
+  for(size_t x = 0; x < PILLARS_GRID_WIDTH; ++x) {
+	for(size_t y = 0; y < PILLARS_GRID_HEIGHT; ++y) {
+	   size_t i = y * PILLARS_GRID_WIDTH + x;
+	   pillars[i].height = 5.0f;
+	   pillars[i].color = PILLAR_COLOR;
+	   pillars[i].position = (Vector2) {
+		 x * PILLARS_GRID_SPACING_X,
+		 y * PILLARS_GRID_SPACING_Y
+	   };
+	}
   }
 }
 
@@ -118,6 +151,8 @@ int main(void)
 
   DisableCursor();
   SetTargetFPS(SCREEN_FPS);
+
+  init_pillars();
 
   while (!WindowShouldClose())
   {
