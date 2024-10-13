@@ -10,16 +10,16 @@
 #define SCREEN_FPS 60
 
 #define PROJS_CAP 1000
-#define PROJ_WIDTH 1.0f
-#define PROJ_HEIGHT 1.0f
-#define PROJ_LEN 1.0f
+#define PROJ_WIDTH 0.1f
+#define PROJ_HEIGHT 0.1f
+#define PROJ_LEN 0.1f
 #define PROJ_COLOR WHITE
-#define PROJ_VEL 1000.0f
+#define PROJ_VEL 5.0f
 #define PROJ_LIFETIME 5.0f
 
 #define BACKGROUND_COLOR BLACK
 
-#define PLAYER_GUN_LEN 0.0f
+#define PLAYER_GUN_LEN 0.5f
 #define PLAYER_HEIGHT 1.0f
 
 typedef float Seconds;
@@ -111,6 +111,10 @@ int main(void)
 	}
 	update_projs();
 	UpdateCamera(&camera, cameraMode);
+
+	if (IsMouseButtonDown(MOUSE_RIGHT_BUTTON)) {
+	  camera.target = (Vector3) {0.0f, 0.0f , 0.0f};
+	}
 
 	BeginDrawing();
 	{
