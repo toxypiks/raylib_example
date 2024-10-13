@@ -109,8 +109,8 @@ int main(void)
 	  ClearBackground(RAYWHITE);
 	  BeginMode3D(camera);
 	  {
-		draw_projs();
 		DrawModelEx(model, position, (Vector3){ 1.0f, 0.0f, 0.0f }, -90.0f, (Vector3){ 1.0f, 1.0f, 1.0f }, WHITE);
+		draw_projs();
 		DrawGrid(10, 1.0f);
 	  }
 	  EndMode3D();
