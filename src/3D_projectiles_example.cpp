@@ -9,17 +9,20 @@
 #define SCREEN_HEIGHT 600
 #define SCREEN_FPS 60
 
-#define PROJS_CAP 69
-#define PROJ_WIDTH 10
-#define PROJ_HEIGHT 10
-#define PROJ_LEN 10
+#define PROJS_CAP 1000
+#define PROJ_WIDTH 1
+#define PROJ_HEIGHT 1
+#define PROJ_LEN 1
 #define PROJ_COLOR BLACK
 #define PROJ_VEL 1000.0
+#define PROJ_LIFETIME 5.0
 
-#define GUN_LEN 50.0
+#define GUN_LEN 0.001
+
+typedef float Seconds;
 
 typedef struct {
-  bool alive;
+  Seconds lifetime;
   Vector3 pos;
   Vector3 dir;
 } Proj;
@@ -30,7 +33,7 @@ size_t projs_size = 0;
 void draw_projs(void)
 {
   for (size_t i = 0; i < PROJS_CAP; i++) {
-	if (projs[i].alive) {
+	if (projs[i].lifetime > 0.0f) {
 	  DrawCube(projs[i].pos,
 			   PROJ_WIDTH,
 			   PROJ_HEIGHT,
@@ -41,11 +44,13 @@ void draw_projs(void)
 }
 
 void update_projs(void) {
+  const Seconds dt = GetFrameTime();
   for (size_t i = 0; i < PROJS_CAP; ++i) {
-	if (projs[i].alive) {
+	if (projs[i].lifetime > 0.0f) {
+	  projs[i].lifetime -= dt;
 	  projs[i].pos = Vector3Add(
 		projs[i].pos,
-		Vector3Scale(projs[i].dir, GetFrameTime())); //What does Vector3Scale do?
+		Vector3Scale(projs[i].dir, dt)); //What does Vector3Scale do?
 	}
   }
 }
@@ -53,10 +58,10 @@ void update_projs(void) {
 void spawn_proj(Vector3 pos, Vector3 dir)
 {
   for (size_t i = 0; i < PROJS_CAP; ++i) {
-	if (!projs[i].alive) {
+	if (projs[i].lifetime <= 0.0f) {
 	  projs[i].pos = pos;
 	  projs[i].dir = dir;
-	  projs[i].alive = true;
+	  projs[i].lifetime = PROJ_LIFETIME;
 	  break; //Why break here?
 	}
   }
