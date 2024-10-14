@@ -134,6 +134,8 @@ int main(void)
 {
   InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "3D_projectiles_example");
 
+  Shader shader = LoadShader(0, TextFormat("../shades/light.fs", 330));
+
   Camera camera = {0};
   camera.position = (Vector3){1.0f, PLAYER_HEIGHT, 1.0f};
   camera.target = (Vector3){0.0f, 0.0f, 0.0f};
@@ -171,14 +173,19 @@ int main(void)
 	BeginDrawing();
 	{
 	  ClearBackground(BACKGROUND_COLOR);
-	  BeginMode3D(camera);
+	  BeginShaderMode(shader);
 	  {
+	      BeginMode3D(camera);
+	      {
 		// DrawModelEx(model, position, (Vector3){ 1.0f, 0.0f, 0.0f }, -90.0f, (Vector3){ 1.0f, 1.0f, 1.0f }, WHITE);
-		draw_projs();
-		draw_pillars();
-		DrawGrid(10, 1.0f);
+		    draw_projs();
+		    draw_pillars();
+		    DrawGrid(10, 1.0f);
+	      }
+	      EndMode3D();
 	  }
-	  EndMode3D();
+	  EndShaderMode();
+
 	  snprintf(hud_buffer, sizeof(hud_buffer),
 			   "Target: " V3_Fmt, V3_Arg(camera.target));
 		DrawText(hud_buffer, 10, 10, 20, MAROON);
