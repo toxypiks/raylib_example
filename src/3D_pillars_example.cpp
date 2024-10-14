@@ -156,6 +156,8 @@ int main(void)
 
   init_pillars();
 
+  int cameraPosLoc = GetShaderLocation(shader, "cameraPos");
+
   while (!WindowShouldClose())
   {
 	if (IsMouseButtonDown(MOUSE_LEFT_BUTTON)) {
@@ -163,8 +165,11 @@ int main(void)
 	  spawn_proj(Vector3Add(camera.position, Vector3Scale(dir, PLAYER_GUN_LEN)),
 				 Vector3Scale(dir, PROJ_VEL));
 	}
+	
 	update_projs();
 	UpdateCamera(&camera, cameraMode);
+
+	SetShaderValue(shader, cameraPosLoc, &camera.position, SHADER_UNIFORM_VEC3);
 
 	if (IsMouseButtonDown(MOUSE_RIGHT_BUTTON)) {
 	  camera.target = (Vector3) {0.0f, 0.0f , 0.0f};
