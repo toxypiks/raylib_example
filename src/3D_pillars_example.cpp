@@ -22,6 +22,33 @@
 #define PLAYER_GUN_LEN 0.5f
 #define PLAYER_HEIGHT 1.0f
 
+Color colors[] = {
+    YELLOW,
+    GOLD,
+    ORANGE,
+    PINK,
+    RED,
+    MAROON,
+    GREEN,
+    LIME,
+    DARKGREEN,
+    SKYBLUE,
+    BLUE,
+    DARKBLUE,
+    PURPLE,
+    VIOLET,
+    DARKPURPLE,
+    BEIGE,
+    BROWN,
+    DARKBROWN,
+};
+
+
+Color random_color(void)
+{
+    return colors[rand() % (sizeof(colors) / sizeof(colors[0]))];
+}
+
 typedef float Seconds;
 
 typedef struct {
@@ -111,7 +138,7 @@ void init_pillars(void)
 	for(size_t y = 0; y < PILLARS_GRID_HEIGHT; ++y) {
 	   size_t i = y * PILLARS_GRID_WIDTH + x;
 	   pillars[i].height = 5.0f;
-	   pillars[i].color = PILLAR_COLOR;
+	   pillars[i].color = random_color();
 	   pillars[i].position = (Vector2) {
 		 x * PILLARS_GRID_SPACING_X,
 		 y * PILLARS_GRID_SPACING_Y
