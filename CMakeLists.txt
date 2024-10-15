@@ -7,19 +7,19 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 include_directories(include)
 
 set(SIMPLE_RAYLIB_EXAMPLE
-  ${CMAKE_CURRENT_SOURCE_DIR}/src/main.cpp
+  ${CMAKE_CURRENT_SOURCE_DIR}/src/simple_raylib_example.c
   )
 
 set(SIMPLE_3D_EXAMPLE
-  ${CMAKE_CURRENT_SOURCE_DIR}/src/3D_example.cpp
+  ${CMAKE_CURRENT_SOURCE_DIR}/src/3D_example.c
   )
 
 set(3D_PROJECTILES_EXAMPLE
-  ${CMAKE_CURRENT_SOURCE_DIR}/src/3D_projectiles_example.cpp
+  ${CMAKE_CURRENT_SOURCE_DIR}/src/3D_projectiles_example.c
   )
 
 set(3D_PILLARS_EXAMPLE
-  ${CMAKE_CURRENT_SOURCE_DIR}/src/3D_pillars_example.cpp
+  ${CMAKE_CURRENT_SOURCE_DIR}/src/3D_pillars_example.c
   )
 
 find_package(raylib)
