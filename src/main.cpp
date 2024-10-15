@@ -12,10 +12,12 @@
 int main(void)
 {
   InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT,
-			 "raylib_example");
+             "raylib_example");
 
   Texture2D dvd = LoadTexture("../textures/DVD_logo.png");
-  Shader shader = LoadShader(0, TextFormat("../shades/wave.fs", 330));
+
+
+  Shader shader = LoadShader(NULL, TextFormat("../shades/wave.fs"));
 
   int secondsLoc = GetShaderLocation(shader, "seconds");
   int freqXLoc = GetShaderLocation(shader, "freqX");
@@ -28,10 +30,10 @@ int main(void)
   // Shader uniform values that can be updated at any time
   float freqX = 25.0f;
   float freqY = 25.0f;
-  float ampX = 5.0f;
-  float ampY = 5.0f;
-  float speedX = 8.0f;
-  float speedY = 8.0f;
+  float ampX = 10.0f;
+  float ampY = 10.0f;
+  float speedX = 20.0f; //8.0f
+  float speedY = 20.0f;
 
   float screenSize[2] = { (float)GetScreenWidth(), (float)GetScreenHeight() };
   SetShaderValue(shader, GetShaderLocation(shader, "size"), &screenSize, SHADER_UNIFORM_VEC2);
